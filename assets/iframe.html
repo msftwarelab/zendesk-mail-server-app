@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/combine/npm/@zendeskgarden/css-bedrock@7.0.21,npm/@zendeskgarden/css-utilities@4.3.0"
+    />
+    <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+      crossorigin="anonymous"
+    />
+    <link href="main.css" rel="stylesheet" />
+  </head>
+  <body>
+    <div id="content"></div>
+    <footer>
+      <a href="https://www.atmail.com/contact/" target="_blank">Report bugs</a>
+    </footer>
+    <script id="requester-template" type="text/x-handlebars-template">
+      <table>
+        <tr>
+          <td>User name:</td>
+          <td class="data">{{username}}</td>
+        </tr>
+        <tr>
+          <td>Migration Status:</td>
+          <td class="data">{{migrateStatus}}</td>
+        </tr>
+        {{#if isMigrated}}
+          <tr>
+            <td>User Status:</td>
+            <td class="data">{{userStatus}}</td>
+          </tr>
+          {{#if forward}}
+            <tr>
+              <td>Forward:</td>
+              <td class="data">{{forward}}</td>
+            </tr>
+          {{/if}}
+          {{#if quota}}
+            <tr>
+              <td>Quota:</td>
+              <td class="data">{{quota}}</td>
+            </tr>
+          {{/if}}
+          {{#if usedQuota}}
+            <tr>
+              <td>Used Quota:</td>
+              <td class="data">{{usedQuota}}</td>
+            </tr>
+          {{/if}}
+          {{#if totpStatus}}
+            <tr>
+              <td>2FA Status:</td>
+              <td class="data">{{totpStatus}}</td>
+            </tr>
+          {{/if}}
+        {{/if}}
+      </table>
+    </script>
+    <script id="error-template" type="text/x-handlebars-template">
+      <p>{{status}}
+        -
+        {{statusText}}
+        error. Please report a bug at the link below.</p>
+    </script>
+    <script src="https://static.zdassets.com/zendesk_app_framework_sdk/2.0/zaf_sdk.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/handlebars@4.3.3/dist/handlebars.min.js"></script>
+    <script src="main.js"></script>
+  </body>
+</html>
