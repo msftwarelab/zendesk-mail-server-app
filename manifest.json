@@ -12,9 +12,30 @@
       "ticket_sidebar": {
         "url": "assets/iframe.html",
         "flexible": true
-      }
+      },
+      "user_sidebar": "assets/iframe.html"
     }
   },
+  "parameters": [
+    {
+      "name": "mailServerUrl",
+      "type": "url",
+      "required": true,
+      "secure": false
+    },
+    {
+      "name": "username",
+      "type": "text",
+      "required": true,
+      "secure": false
+    },
+    {
+      "name": "password",
+      "type": "password",
+      "required": true,
+      "secure": false
+    }
+  ],
   "version": "1.0",
   "frameworkVersion": "2.0"
 }

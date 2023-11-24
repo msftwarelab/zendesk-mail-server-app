@@ -1,12 +1,30 @@
 (function () {
     var client = ZAFClient.init();
     client.invoke('resize', { width: '100%', height: '200px' });
-    client.get('ticket.requester.id').then(
-        function(data) {
-            var user_id = data['ticket.requester.id'];
-            requestUserInfo(client, user_id);
+    client.on('app.registered', function(appData) {
+      var currentLocation = appData.context.location;
+      client.metadata().then(function(metadata) {
+        if (currentLocation === 'user_sidebar') {
+          client.get('user').then(
+            function(data) {
+              requestEmailServer(client, data.user.email, metadata.settings);
+            },
+            function(response) {
+              showError(response);
+            }
+          );
+        } else if (currentLocation === 'ticket_sidebar') {
+          client.get('ticket.requester.id').then(
+            function(data) {
+                var user_id = data['ticket.requester.id'];
+                requestUserInfo(client, user_id, metadata.settings);
+            }
+          );
         }
-      );
+      });
+      
+    });
+    
 })();
 
 function showInfo(data) {
@@ -39,7 +57,7 @@ function showError(response) {
     document.getElementById("content").innerHTML = html;
 }
 
-function requestUserInfo(client, id) {
+function requestUserInfo(client, id, metadata) {
   var settings = {
       url: '/api/v2/users/' + id + '.json',
       type:'GET',
@@ -48,7 +66,7 @@ function requestUserInfo(client, id) {
   
     client.request(settings).then(
       function(data) {
-        requestEmailServer(client, data.user.email);
+        requestEmailServer(client, data.user.email, metadata);
       },
       function(response) {
         showError(response);
@@ -68,12 +86,12 @@ function formatDate(date) {
 }
 
 
-function requestEmailServer(client, email) {
+function requestEmailServer(client, email, metadata) {
   var settings = {
-      url: 'https://admin.au-east-stg.atmailcloud.com/index.php/api/accounts/view',
+      url: metadata.mailServerUrl,
       type: 'POST',
       headers: {
-          'Authorization': 'Basic ' + btoa('kakaduapisandbox:m8q36LQwaZi@qA_GG4n33FRLntd'),
+          'Authorization': 'Basic ' + btoa(`${metadata.username}:${metadata.password}`),
           'Content-Type': 'application/x-www-form-urlencoded',
       },
       data: `username=${email}`,
